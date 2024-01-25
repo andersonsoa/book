@@ -21,12 +21,10 @@ export class BookmarkService {
   }
 
   async createBookmark(userId: number, dto: CreateBookmarkDto) {
-    const bookmark = await this.service.db.insert(bookmarks).values({
+    await this.service.db.insert(bookmarks).values({
       ...dto,
       userId,
     });
-
-    return bookmark;
   }
 
   async editBookmarkById(

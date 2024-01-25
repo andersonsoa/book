@@ -1,17 +1,10 @@
 import { relations } from 'drizzle-orm';
-import {
-  date,
-  foreignKey,
-  integer,
-  pgTable,
-  serial,
-  varchar,
-} from 'drizzle-orm/pg-core';
+import { date, integer, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: varchar('name'),
-  email: varchar('email'),
+  email: varchar('email').unique().notNull(),
   hash: varchar('hash'),
 
   createdAt: date('created_at').defaultNow(),

@@ -1,8 +1,8 @@
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
-// import { BookmarkModule } from './bookmark/bookmark.module';
+import { BookmarkModule } from './bookmark/bookmark.module';
 // import { PrismaModule } from './prisma/prisma.module';
-// import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from 'src/database/database.module';
 
@@ -11,11 +11,10 @@ import { DatabaseModule } from 'src/database/database.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // AuthModule,
+    AuthModule,
     UserModule,
     DatabaseModule,
-    // BookmarkModule,
-    // PrismaModule,
+    BookmarkModule,
   ],
 })
 export class AppModule {}

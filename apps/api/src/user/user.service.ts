@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-// import { PrismaService } from '../prisma/prisma.service';
 import { EditUserDto } from './dto';
 import { DatabaseService } from 'src/database/database.service';
 import { users } from 'src/database/schema';
@@ -16,12 +15,23 @@ export class UserService {
         ...dto,
       })
       .where(eq(users.id, userId))
-      .returning();
+      .returning({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        createdAt: users.createdAt,
+      });
 
     return user;
   }
 
   async listUsers() {
-    return this.service.db.query.users.findMany();
+    return this.service.db.query.users.findMany({
+      columns: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
   }
 }
