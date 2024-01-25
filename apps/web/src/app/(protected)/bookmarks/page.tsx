@@ -1,7 +1,7 @@
 import { SignOut } from "@/components/sign-out";
 import { getServerSession } from "next-auth";
 
-export default async function Home() {
+export default async function Bookmarks() {
   const session = await getServerSession();
   return (
     <>

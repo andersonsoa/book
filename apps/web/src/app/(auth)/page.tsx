@@ -18,7 +18,7 @@ export default function LoginPage() {
             password: form.get("password"),
 
             redirect: true,
-            callbackUrl: "/dashboard",
+            callbackUrl: "/bookmarks",
           });
         }}
         className="grid gap-4"
