@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 import { AuthDto } from './dto';
 import { DatabaseService } from 'src/database/database.service';
-import { users } from 'src/database/schema';
+import { userRoles, users } from 'src/database/schema';
 import { eq } from 'drizzle-orm';
 
 @Injectable({})
@@ -26,7 +26,15 @@ export class AuthService {
         })
         .returning({ id: users.id, email: users.email });
 
-      return this.signToken(user.at(0).id, user.at(0).email);
+      await this.service.db.insert(userRoles).values({
+        userId: user.at(0).id,
+        roleId: 1,
+      });
+      const token = await this.signToken(user.at(0).id, user.at(0).email);
+
+      return {
+        access_token: token.access_token,
+      };
     } catch (error) {
       console.log({ error });
       throw new ForbiddenException('Credentials taken');
@@ -36,6 +44,13 @@ export class AuthService {
   async signin(dto: AuthDto) {
     const user = await this.service.db.query.users.findFirst({
       where: eq(users.email, dto.email),
+      with: {
+        userRoles: {
+          with: {
+            role: true,
+          },
+        },
+      },
     });
 
     if (!user) throw new ForbiddenException('Credentials are incorrect.');
@@ -50,6 +65,7 @@ export class AuthService {
       id: user.id,
       name: user.name,
       email: user.email,
+      roles: user.userRoles.map((ur) => ur.role),
     };
   }
 
