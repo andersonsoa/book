@@ -8,7 +8,7 @@ type Bookmark = {
   link?: string;
 };
 
-export async function getBookmarks(): Promise<Bookmark[]> {
+export async function getBookmarks(): Promise<Bookmark[] | null> {
   const session = await getServerSession(authOptions);
 
   if (!session) throw new Error("session not found");
@@ -18,7 +18,10 @@ export async function getBookmarks(): Promise<Bookmark[]> {
     headers: {
       Authorization: `Bearer ${session.user.token}`,
     },
+    cache: "no-cache",
   });
+
+  if (!response.ok) return null;
 
   return response.json();
 }
