@@ -24,5 +24,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/(bookmarks|admin)", "/(bookmarks|admin)/:path*"],
+  matcher: ["/(bookmarks|admin|material)", "/(bookmarks|admin)/:path*"],
 };

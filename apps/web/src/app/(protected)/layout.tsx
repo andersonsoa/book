@@ -9,8 +9,13 @@ interface Props {
 export default async function ProtectedLayout(props: Props) {
   const session = await getServerSession();
   return (
-    <section className="pt-16">
-      <header className="fixed top-0 inset-x-0 backdrop-blur-md bg-zinc-700/25 shadow-md">
+    <section
+      className="pt-16 h-screen"
+      style={{
+        backgroundImage: "linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)",
+      }}
+    >
+      <header className="fixed top-0 inset-x-0 backdrop-blur-md bg-zinc-50 shadow-md">
         <div className="flex justify-between items-center px-4 w-full h-16">
           <ul className="flex gap-4">
             <li>
