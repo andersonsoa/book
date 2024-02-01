@@ -14,6 +14,7 @@ export function Providers({ children }: Props) {
 
   const toggleDark = () => setThemaSelecionado(themeDark);
   const toggleLight = () => setThemaSelecionado(themeLight);
+
   return (
     <>
       <ThemeProvider theme={themaSelecionado}>

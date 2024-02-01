@@ -1,6 +1,10 @@
+"use server";
+
 import { authOptions } from "@/lib/auth";
 import { TBookmark } from "@/types/domain.types";
 import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
+import { redirect } from "next/dist/server/api-utils";
 
 export async function getBookmarks(): Promise<TBookmark[] | null> {
   const session = await getServerSession(authOptions);
@@ -16,6 +20,7 @@ export async function getBookmarks(): Promise<TBookmark[] | null> {
     },
     next: {
       revalidate: 60,
+      tags: ["bookmarks"],
     },
   });
 
@@ -24,7 +29,7 @@ export async function getBookmarks(): Promise<TBookmark[] | null> {
   return response.json();
 }
 
-export async function createBookmark(data: TBookmark) {
+export async function createBookmark(data: Omit<TBookmark, "id">) {
   const session = await getServerSession(authOptions);
 
   if (!session) throw new Error("session not found");
@@ -39,6 +44,6 @@ export async function createBookmark(data: TBookmark) {
   });
 
   if (!response.ok) return null;
-
+  revalidateTag("collection");
   return response.json();
 }

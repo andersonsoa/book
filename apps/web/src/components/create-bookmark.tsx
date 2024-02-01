@@ -1,5 +1,6 @@
 "use client";
 
+import { createBookmark } from "@/app/actions/bookmarks";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export function CreateBookmark() {
   return (
@@ -18,10 +20,25 @@ export function CreateBookmark() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>What you want to save?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = new FormData(e.target as HTMLFormElement);
+
+                await createBookmark({
+                  title: form.get("title") as string,
+                  description: form.get("description") as string,
+                });
+              }}
+              className="space-y-4 mt-4"
+            >
+              <Input name="title" placeholder="Title" />
+              <Input name="description" placeholder="Description" />
+
+              <Button>Salvar</Button>
+            </form>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

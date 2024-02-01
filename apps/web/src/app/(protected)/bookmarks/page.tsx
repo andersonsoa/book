@@ -5,9 +5,9 @@ import { Suspense } from "react";
 
 export default function Bookmarks() {
   return (
-    <main className="max-w-5xl w-full mx-auto p-4">
-      <div className="flex justify-center items-center w-full">
-        <h1 className="text-2xl font-bold mb-6">My Bookmarks</h1>
+    <main className="max-w-7xl w-full mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">My Bookmarks</h1>
         <CreateBookmark />
       </div>
 
