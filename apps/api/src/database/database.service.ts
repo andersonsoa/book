@@ -1,26 +1,18 @@
-import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Client } from 'pg';
+import { drizzle, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import {
   Injectable,
   OnApplicationShutdown,
   OnModuleInit,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import Database from "better-sqlite3"
 
 import * as schema from './schema';
 
 @Injectable({})
 export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
-  private _db: NodePgDatabase<typeof schema>;
-  private _client: Client;
-
-  private connectionObj = {
-    host: '127.0.0.1',
-    port: 5435,
-    user: 'postgres',
-    password: '123456',
-    database: 'ponto-local',
-  };
+  private _db: BetterSQLite3Database<typeof schema>
+  private _database = new Database('bookmarks.db') 
 
   constructor(private config: ConfigService) {}
 
@@ -29,14 +21,10 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
   }
 
   async onModuleInit() {
-    const connectionString = this.config.get('DATABASE_URL');
-    this._client = new Client(connectionString);
-    await this._client.connect();
-    this._db = drizzle(this._client, { schema });
+    this._db = drizzle(this._database, { schema });
   }
 
   async onApplicationShutdown(signal?: string) {
     console.log({ signal });
-    await this._client.end();
   }
 }

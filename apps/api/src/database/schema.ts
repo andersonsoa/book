@@ -1,20 +1,18 @@
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
-  date,
   integer,
-  pgTable,
   primaryKey,
-  serial,
-  varchar,
-} from 'drizzle-orm/pg-core';
+  sqliteTable,
+  text,
+} from 'drizzle-orm/sqlite-core';
 
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  name: varchar('name'),
-  email: varchar('email').unique().notNull(),
-  hash: varchar('hash'),
+export const users = sqliteTable('users', {
+  id: integer('id', { mode: "number"}).primaryKey({ autoIncrement: true}),
+  name: text('name'),
+  email: text('email').unique().notNull(),
+  hash: text('hash'),
 
-  createdAt: date('created_at').defaultNow(),
+  createdAt: text('created_at').default(sql`CURRENT_DATE`),
 });
 
 export const userRelations = relations(users, ({ many }) => ({
@@ -22,12 +20,12 @@ export const userRelations = relations(users, ({ many }) => ({
   userRoles: many(userRoles),
 }));
 
-export const roles = pgTable('roles', {
-  id: serial('id').primaryKey(),
-  description: varchar('description').notNull(),
+export const roles = sqliteTable('roles', {
+  id: integer('id', { mode: "number"}).primaryKey({ autoIncrement: true }),
+  description: text('description').notNull(),
 });
 
-export const userRoles = pgTable(
+export const userRoles = sqliteTable(
   'user_roles',
   {
     userId: integer('user_id')
@@ -45,11 +43,11 @@ export const userRolesRelations = relations(userRoles, ({ one }) => ({
   role: one(roles, { fields: [userRoles.roleId], references: [roles.id] }),
 }));
 
-export const bookmarks = pgTable('bookmarks', {
-  id: serial('id').primaryKey(),
-  title: varchar('title').notNull(),
-  description: varchar('description'),
-  link: varchar('link'),
+export const bookmarks = sqliteTable('bookmarks', {
+  id: integer('id', { mode: "number"}).primaryKey({ autoIncrement: true}),
+  title: text('title').notNull(),
+  description: text('description'),
+  link: text('link'),
 
   userId: integer('user_id').notNull(),
 });

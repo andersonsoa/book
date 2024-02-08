@@ -1,9 +1,9 @@
 import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
   schema: './src/database/schema.ts',
-  driver: 'pg',
+  driver: 'better-sqlite',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL,
+    url: './src/database/bookmarks.db'
   },
   verbose: true,
   strict: true,
